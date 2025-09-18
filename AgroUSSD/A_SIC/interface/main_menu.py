@@ -35,7 +35,7 @@ path = workspace / "Farmer.json"
 
 # Save users to file
 def save_farmer_registration(path, farmer_details_dict):
-    with open(path, "a", newline="", encoding="utf-8") as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(farmer_details_dict, f, indent=4)
     print("Information saved to data base.")
 
@@ -48,6 +48,7 @@ def load_farmer_registration(path):
                 return loaded_data
             
         except json.JSONDecodeError:
+            print("Warning: User file is corrupted. Starting with empty data.")
             return {}
     return {}
 
@@ -63,45 +64,41 @@ def load_farmer_registration(path):
 
 # Farmer registration
 def farmer_registration():
-    # farmer_details_dict = {}
-
-    try:
+    #Handle user registration
+    user = load_farmer_registration(path)
+    
+    while True:
         print("\n\tYou are about to register as a Farmer.")
-        farmer_phone_no = input("Enter phone number: ")
-        # user = load_farmer_registration(path)
-        # if farmer_phone_no in user:
-        #     print("This phone number is already registered. Try logging in.")
-        #     # return
+        farmer_phone_no = input("Enter phone number (11 digits): ").strip()
         
-        if len(farmer_phone_no) != 11:
+        if len(farmer_phone_no) != 11 or not farmer_phone_no.isdigit():
             print("Phone number must be 11 digits!")
-        # else:
-        #     farmer_details_dict['Phone number'] = farmer_phone_no
+            continue
 
-        farmer_name = input("Enter your name: ").title()
+        if farmer_phone_no in user:
+            print("This number is already registered.")
+            return
+        break
 
-        # farmer_details_dict['Name'] = farmer_name
+    farmer_name = input("Enter your name: ").strip().title()
 
-        farmer_loaction = input("Enter your location: ").title()
-        # farmer_details_dict['Location'] = farmer_loaction
-
-        farmer_pin = input("Create a 4-digit pin: ")
-        if len(farmer_pin) != 4:
+    farmer_loaction = input("Enter your location: ").strip().title()
+    while True:
+        farmer_pin = input("Create a 4-digit pin: ").strip()
+        if len(farmer_pin) != 4 or not farmer_pin.isdigit():
             print("Pin must be 4 digits!")
-        # else:
-        #     farmer_details_dict['Pin'] = farmer_pin
-        user = {
-            farmer_phone_no:{
-            "Name": farmer_name,
-            "Location": farmer_loaction,
-            "Pin": farmer_pin
-            }
-        }
+            continue
+        break
 
-        save_farmer_registration(path, user)
-        print(f"Registration successful! Welcone, {farmer_name}")
-    except Exception as e:
-        print("Error as", e)
+    user[farmer_phone_no] = {
+        "Name": farmer_name,
+        "Location": farmer_loaction,
+        "Pin": farmer_pin
+    }
+
+    save_farmer_registration(path, user)
+    print(f"Registration successful! Welcone, {farmer_name}")
+
     
 
 def buyer_registration():
