@@ -15,7 +15,7 @@ try:
         if choice == 1:
             main_menu.handle_input(choice)
 
-        # elif choice == 2:
-        #     handle_input(choice)
+        elif choice == 2:
+             main_menu.handle_input(choice)
 except Exception as e:
     print("Error as", e)
