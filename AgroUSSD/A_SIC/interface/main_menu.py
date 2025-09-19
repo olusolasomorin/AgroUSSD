@@ -47,7 +47,7 @@ def reset_to_main():
 workspace = Path("Farmer_Details")
 workspace.mkdir(exist_ok=True)
 path = workspace / "Farmer.json"
-path = workspace / "Buyer.json"
+path1 = workspace / "Buyer.json"
 
 # Save farmer to file
 def save_farmer_registration(path, farmer_details_dict):
@@ -69,16 +69,16 @@ def load_farmer_registration(path):
     return {}
 
 # Save buyer to file
-def save_buyer_registration(path, buyer_details_dict):
-    with open(path, "w", encoding="utf-8") as f:
+def save_buyer_registration(path1, buyer_details_dict):
+    with open(path1, "w", encoding="utf-8") as f:
         json.dump(buyer_details_dict, f, indent=4)
     print("Information saved to data base.")
 
 # Load buyer form file if it exists
-def load_buyer_registration(path):
-    if path.exists():
+def load_buyer_registration(path1):
+    if path1.exists():
         try:
-            with open(path, "r", encoding="utf-8") as f:
+            with open(path1, "r", encoding="utf-8") as f:
                 loaded_data = json.load(f)
                 return loaded_data
             
@@ -137,7 +137,7 @@ def farmer_registration():
 
 def buyer_registration():
     #Handle user registration
-    user = load_buyer_registration(path)
+    user = load_buyer_registration(path1)
     
     while True:
         print("\n\tYou are about to register as a Buyer.")
@@ -168,7 +168,7 @@ def buyer_registration():
         "Pin": buyer_pin
     }
 
-    save_farmer_registration(path, user)
+    save_buyer_registration(path1, user)
     print(f"Registration successful! Welcome, {buyer_name}")
 
 
@@ -190,7 +190,7 @@ def farmer_login():
 
 
 def buyer_login():
-    user = load_buyer_registration(path)
+    user = load_buyer_registration(path1)
 
     buyer_phone_no = input("Enter your phone number: ").strip()
     if buyer_phone_no not in user:
